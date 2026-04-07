@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hội thi Giáo viên chủ nhiệm giỏi xã Vạn Linh 2025-2026</title>
+    <title>Hội thi GVCN Giỏi xã Vạn Linh 2025-2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -52,6 +52,15 @@
         .tab-btn:not(.tab-active):hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
+
+        /* Tùy chỉnh giao diện select */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.5em;
+        }
     </style>
 </head>
 <body class="flex flex-col">
@@ -62,6 +71,7 @@
             HỘI THI GIÁO VIÊN CHỦ NHIỆM GIỎI XÃ VẠN LINH<br>
             <span class="text-2xl md:text-3xl text-yellow-400 mt-2 block">NĂM HỌC 2025-2026</span>
         </h1>
+        <p class="text-sm opacity-75 italic mt-2">Hệ thống bốc thăm điện tử khách quan - chính xác</p>
     </header>
 
     <!-- Navigation Tabs -->
@@ -85,7 +95,7 @@
                     <i class="fas fa-cog mr-3 text-green-500"></i> Thiết lập 6 Ngày giảng
                 </h3>
                 <label class="block text-sm font-bold text-gray-600 mb-2 italic">Dán danh sách ngày giảng vào đây (mỗi ngày 1 dòng):</label>
-                <textarea id="dateInputData" class="w-full h-40 p-4 border-2 border-green-100 rounded-xl mb-6 font-mono text-base focus:border-green-500 outline-none transition-all shadow-inner" placeholder="Chiều thứ 2 ngày 13/4/2026..."></textarea>
+                <textarea id="dateInputData" class="w-full h-44 p-4 border-2 border-green-100 rounded-xl mb-6 font-mono text-base focus:border-green-500 outline-none transition-all shadow-inner" placeholder="Chiều thứ 2 ngày 13/4/2026..."></textarea>
                 <button onclick="initModule('date')" class="w-full bg-green-600 text-white font-black py-4 rounded-xl hover:bg-green-700 transition-all shadow-lg text-lg uppercase tracking-widest active:scale-95">
                     Xác nhận danh sách ngày
                 </button>
@@ -93,7 +103,10 @@
 
             <!-- Game Board Date -->
             <div id="boardDate" class="hidden w-full flex flex-col items-center">
-                <div id="shuffleCtrlDate" class="mb-10">
+                <div id="shuffleCtrlDate" class="mb-10 text-center">
+                    <div id="shuffleReadyMsgDate" class="hidden mb-4 bg-green-100 text-green-800 px-6 py-2 rounded-full font-bold border border-green-200">
+                        <i class="fas fa-check-circle mr-2"></i> Đã xáo trộn xong! Mời thầy cô chọn ô.
+                    </div>
                     <button onclick="startShuffle('date')" class="bg-orange-500 hover:bg-orange-600 text-white text-3xl font-black py-6 px-16 rounded-full shadow-2xl animate-pulse transform hover:scale-105 transition-all border-4 border-white">
                         <i class="fas fa-random mr-3"></i> BẮT ĐẦU XÁO TRỘN
                     </button>
@@ -101,8 +114,9 @@
                 <div id="statusDate" class="hidden mb-10 text-3xl font-black text-orange-600 bg-white px-12 py-5 rounded-full border-4 border-orange-400 shadow-xl">
                     <i class="fas fa-sync-alt fa-spin mr-3"></i> ĐANG XÁO TRỘN: <span id="timerDate">10</span>s
                 </div>
-                <div id="gridDate" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl"></div>
-                <div id="resultsDate" class="hidden mt-12 w-full bg-white p-8 rounded-2xl shadow-2xl border-t-8 border-green-600">
+                <div id="gridDate" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl mb-12"></div>
+                
+                <div id="resultsDate" class="hidden w-full bg-white p-8 rounded-2xl shadow-2xl border-t-8 border-green-600">
                     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b pb-4">
                         <h4 class="text-2xl font-black text-green-800 uppercase italic">
                             <i class="fas fa-list-ol mr-2"></i> Kết quả bốc thăm ngày
@@ -141,11 +155,14 @@
             <!-- Game Board Lesson -->
             <div id="boardLesson" class="hidden w-full flex flex-col items-center">
                 <div class="mb-6 text-center">
-                    <span class="bg-blue-800 text-white px-10 py-3 rounded-full font-black text-xl shadow-lg border-2 border-yellow-400">
+                    <span class="bg-blue-800 text-white px-10 py-3 rounded-full font-black text-xl shadow-lg border-2 border-yellow-400 uppercase">
                         BỐC TIẾT GIẢNG: <span id="lessonTitleDate" class="text-yellow-300 ml-2"></span>
                     </span>
                 </div>
-                <div id="shuffleCtrlLesson" class="mb-10">
+                <div id="shuffleCtrlLesson" class="mb-10 text-center">
+                    <div id="shuffleReadyMsgLesson" class="hidden mb-4 bg-blue-100 text-blue-800 px-6 py-2 rounded-full font-bold border border-blue-200">
+                        <i class="fas fa-check-circle mr-2"></i> Đã xáo trộn bài giảng! Mời thầy cô chọn ô.
+                    </div>
                     <button onclick="startShuffle('lesson')" class="bg-blue-600 hover:bg-blue-700 text-white text-3xl font-black py-6 px-16 rounded-full shadow-2xl animate-pulse border-4 border-white transform hover:scale-105 transition-all">
                         <i class="fas fa-sync-alt mr-3"></i> BẮT ĐẦU XÁO TRỘN
                     </button>
@@ -153,8 +170,9 @@
                 <div id="statusLesson" class="hidden mb-10 text-3xl font-black text-blue-600 bg-white px-12 py-5 rounded-full border-4 border-blue-400 shadow-xl">
                     <i class="fas fa-cog fa-spin mr-3"></i> ĐANG XÁO TRỘN: <span id="timerLesson">10</span>s
                 </div>
-                <div id="gridLesson" class="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-4xl"></div>
-                <div id="resultsLesson" class="hidden mt-12 w-full bg-white p-8 rounded-2xl shadow-2xl border-t-8 border-blue-600">
+                <div id="gridLesson" class="grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-4xl mb-12"></div>
+                
+                <div id="resultsLesson" class="hidden w-full bg-white p-8 rounded-2xl shadow-2xl border-t-8 border-blue-600">
                     <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b pb-4">
                         <h4 class="text-2xl font-black text-blue-800 uppercase italic">
                             <i class="fas fa-clipboard-check mr-2"></i> Biên bản bốc bài giảng
@@ -169,28 +187,40 @@
         </div>
 
         <!-- Reload Button -->
-        <button id="resetBtn" onclick="location.reload()" class="mt-16 text-gray-400 hover:text-red-500 text-sm font-bold transition-colors hidden uppercase tracking-widest border-b border-transparent hover:border-red-500 pb-1">
+        <button id="resetBtn" onclick="location.reload()" class="mt-8 text-gray-400 hover:text-red-500 text-sm font-bold transition-colors hidden uppercase tracking-widest border-b border-transparent hover:border-red-500 pb-1">
             <i class="fas fa-redo-alt mr-1"></i> Thiết lập lại từ đầu
         </button>
     </main>
 
-    <!-- Modal Nhập tên -->
+    <!-- Modal Nhập tên & Chọn đơn vị -->
     <div id="nameModal" class="fixed inset-0 bg-blue-950/80 flex items-center justify-center z-50 hidden backdrop-blur-md">
         <div class="bg-white rounded-3xl p-10 max-w-lg w-full shadow-[0_0_50px_rgba(0,0,0,0.5)] mx-4 border-4 border-blue-100">
             <div class="text-center mb-6">
                 <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4">
-                    <i class="fas fa-user-edit"></i>
+                    <i class="fas fa-user-check"></i>
                 </div>
-                <h3 class="text-3xl font-black text-blue-900 uppercase">Mời thầy cô chọn ô <span id="modalBoxNum" class="text-orange-500"></span></h3>
+                <h3 class="text-3xl font-black text-blue-900 uppercase">MỜI THẦY CÔ CHỌN Ô <span id="modalBoxNum" class="text-orange-500"></span></h3>
                 <p id="modalSubText" class="text-gray-500 font-medium mt-2"></p>
             </div>
             
-            <label class="block text-gray-600 font-bold mb-2 ml-1">Họ và tên giáo viên:</label>
-            <input type="text" id="teacherName" class="w-full px-6 py-5 rounded-2xl border-2 border-blue-200 focus:outline-none focus:border-blue-600 text-2xl font-black text-blue-800 mb-8 shadow-inner placeholder:text-gray-300" placeholder="VD: Nguyễn Văn A" autocomplete="off">
+            <div class="space-y-4 mb-8">
+                <div>
+                    <label class="block text-gray-600 font-bold mb-1 ml-1 text-sm">Đơn vị công tác:</label>
+                    <select id="teacherSchool" class="w-full px-6 py-4 rounded-xl border-2 border-blue-200 focus:outline-none focus:border-blue-600 text-lg font-bold text-blue-800 bg-white">
+                        <option value="THCS Hòa Bình">THCS Hòa Bình</option>
+                        <option value="THCS Vạn Linh">THCS Vạn Linh</option>
+                        <option value="THCS Y Tịch">THCS Y Tịch</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-600 font-bold mb-1 ml-1 text-sm">Họ và tên giáo viên:</label>
+                    <input type="text" id="teacherName" class="w-full px-6 py-4 rounded-xl border-2 border-blue-200 focus:outline-none focus:border-blue-600 text-xl font-black text-blue-800 shadow-inner" placeholder="VD: Nguyễn Văn A" autocomplete="off">
+                </div>
+            </div>
             
             <div class="flex gap-4">
-                <button onclick="closeModal()" class="flex-1 py-4 rounded-xl text-gray-400 font-bold hover:bg-gray-100 transition-all">HỦY BỎ</button>
-                <button onclick="confirmFlip()" class="flex-1 py-4 rounded-xl bg-blue-700 text-white font-black text-lg hover:bg-blue-800 shadow-xl transition-all transform active:scale-95 uppercase tracking-wider">LẬT Ô</button>
+                <button onclick="closeModal()" class="flex-1 py-4 rounded-xl text-gray-400 font-bold hover:bg-gray-100 transition-all uppercase">Hủy bỏ</button>
+                <button onclick="confirmFlip()" class="flex-1 py-4 rounded-xl bg-blue-700 text-white font-black text-lg hover:bg-blue-800 shadow-xl transition-all transform active:scale-95 uppercase tracking-wider">Lật Ô</button>
             </div>
         </div>
     </div>
@@ -210,10 +240,8 @@
         function switchTab(tab) {
             if (state.isShuffling) return;
             state.currentTab = tab;
-            const tabDate = document.getElementById('tabDate');
-            const tabLesson = document.getElementById('tabLesson');
-            tabDate.classList.toggle('tab-active', tab === 'date');
-            tabLesson.classList.toggle('tab-active', tab === 'lesson');
+            document.getElementById('tabDate').classList.toggle('tab-active', tab === 'date');
+            document.getElementById('tabLesson').classList.toggle('tab-active', tab === 'lesson');
             document.getElementById('sectionDate').classList.toggle('hidden', tab !== 'date');
             document.getElementById('sectionLesson').classList.toggle('hidden', tab !== 'lesson');
             document.querySelector('header').style.backgroundColor = tab === 'date' ? '#064e3b' : '#1e3a8a';
@@ -223,7 +251,7 @@
             const input = document.getElementById(type + 'InputData').value.trim();
             const lines = input.split('\n').map(l => l.trim()).filter(l => l.length > 0);
             if (lines.length < state[type].count) {
-                alert(`Vui lòng nhập đủ ít nhất ${state[type].count} nội dung bốc thăm!`);
+                alert(`Vui lòng nhập đủ ít nhất ${state[type].count} nội dung!`);
                 return;
             }
             state[type].pool = lines.slice(0, state[type].count);
@@ -251,9 +279,10 @@
                                 <span class="text-9xl font-black num-display" style="text-shadow: 4px 4px 0px rgba(0,0,0,0.2)">${i}</span>
                             </div>
                             <div class="absolute inset-0 backface-hidden rotate-y-180 bg-white rounded-2xl border-4 ${border} overflow-hidden flex flex-col">
-                                <div class="w-full bg-gray-800 py-3 text-center text-white text-sm font-black uppercase teacher-name">Đang chờ...</div>
+                                <div class="w-full bg-gray-800 py-2 text-center text-white text-[10px] font-black uppercase teacher-school leading-tight">ĐƠN VỊ</div>
+                                <div class="w-full bg-blue-900 py-1 text-center text-white text-xs font-black uppercase teacher-name">ĐANG CHỜ...</div>
                                 <div class="flex-grow flex items-center justify-center p-6 text-center">
-                                    <div class="text-2xl font-black text-blue-900 leading-tight result-val italic">...</div>
+                                    <div class="text-xl font-black text-blue-900 leading-tight result-val italic">...</div>
                                 </div>
                                 <div class="h-2 bg-yellow-400 w-full"></div>
                             </div>
@@ -293,6 +322,9 @@
             state.isShuffling = false;
             state[type].pool.sort(() => Math.random() - 0.5);
             document.getElementById('status' + capitalize(type)).classList.add('hidden');
+            document.getElementById('shuffleCtrl' + capitalize(type)).classList.remove('hidden');
+            document.getElementById('shuffleReadyMsg' + capitalize(type)).classList.remove('hidden');
+            document.querySelector(`#shuffleCtrl${capitalize(type)} button`).classList.add('hidden');
             const cards = document.querySelectorAll(`#grid${capitalize(type)} .flip-card`);
             cards.forEach((card, idx) => {
                 card.classList.remove('shuffling-animation');
@@ -315,20 +347,27 @@
 
         function confirmFlip() {
             const name = document.getElementById('teacherName').value.trim();
+            const school = document.getElementById('teacherSchool').value;
             if (!name) { alert("Vui lòng nhập tên giáo viên!"); return; }
             const { type, boxNum } = state.activeBox;
             const card = document.getElementById(`${type}-card-${boxNum}`);
             const val = card.getAttribute('data-value');
+            card.querySelector('.teacher-school').innerText = school;
             card.querySelector('.teacher-name').innerText = name;
             card.querySelector('.result-val').innerText = val;
             card.classList.add('flipped');
             const list = document.getElementById('list' + capitalize(type));
             const div = document.createElement('div');
-            div.className = "flex items-center gap-3 bg-gray-50 p-3 rounded-xl border-l-4 " + (type === 'date' ? 'border-green-500' : 'border-blue-500');
-            div.innerHTML = `<span class="bg-gray-200 px-3 py-1 rounded text-sm">Ô ${boxNum}</span> <span class="text-blue-900">${name}</span> <i class="fas fa-caret-right text-gray-400"></i> <span class="text-red-600">${val}</span>`;
+            div.className = "flex items-center gap-3 bg-white p-3 rounded-xl border border-gray-100 shadow-sm border-l-4 " + (type === 'date' ? 'border-green-500' : 'border-blue-500');
+            div.innerHTML = `
+                <span class="bg-gray-100 px-2 py-1 rounded text-[10px] font-bold">Ô ${boxNum}</span> 
+                <span class="text-xs text-gray-500 italic shrink-0">${school}</span>
+                <span class="text-blue-900 font-bold truncate">${name}</span> 
+                <i class="fas fa-arrow-right text-gray-300 text-xs"></i> 
+                <span class="text-red-600 font-black">${val}</span>`;
             list.appendChild(div);
             document.getElementById('results' + capitalize(type)).classList.remove('hidden');
-            state[type].results.push({ box: boxNum, name, val });
+            state[type].results.push({ box: boxNum, name, school, val });
             closeModal();
         }
 
@@ -338,11 +377,11 @@
             let content = `${FULL_TITLE}\n`;
             content += `BIÊN BẢN BỐC THĂM ${type === 'date' ? 'NGÀY GIẢNG' : 'BÀI GIẢNG'}\n`;
             if (type === 'lesson') content += `DÀNH CHO NGÀY: ${state.lesson.target}\n`;
-            content += `-------------------------------------------\n\n`;
+            content += `--------------------------------------------------------\n\n`;
             sorted.forEach(r => {
-                content += `Ô SỐ ${r.box}: GV ${r.name.toUpperCase()} -> KẾT QUẢ: ${r.val}\n`;
+                content += `Ô SỐ ${r.box}: GV ${r.name.toUpperCase()} (${r.school}) -> KẾT QUẢ: ${r.val}\n`;
             });
-            content += `\n-------------------------------------------\n`;
+            content += `\n--------------------------------------------------------\n`;
             content += `Thời gian xuất: ${new Date().toLocaleString('vi-VN')}`;
             const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
             const link = document.createElement("a");
@@ -355,11 +394,10 @@
         function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
         document.getElementById('teacherName').addEventListener('keypress', (e) => { if(e.key === 'Enter') confirmFlip(); });
         
-        window.onload = async () => {
-            try {
-                const res = await fetch('ngaygiang.txt');
-                if (res.ok) document.getElementById('dateInputData').value = await res.text();
-            } catch (e) {}
+        // Tích hợp sẵn nội dung file ngaygiang.txt
+        window.onload = () => {
+            const defaultDates = "Chiều thứ 2 ngày 13/4/2026\nSáng thứ 3 ngày 14/4/2026\nChiều thứ 2 ngày 13/4/2026\nSáng thứ 3 ngày 14/4/2026\nChiều thứ 2 ngày 13/4/2026\nSáng thứ 3 ngày 14/4/2026";
+            document.getElementById('dateInputData').value = defaultDates;
         };
     </script>
 </body>
